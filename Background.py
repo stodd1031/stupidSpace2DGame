@@ -23,9 +23,6 @@ class Background:
             self.Y0 += (int(2/5 * self.screenHeight) - self.character.Y) / 3
             self.Y1 += (int(2/5 * self.screenHeight) - self.character.Y) / 3
 
-
-        
-
         if self.Y0 > self.screenHeight:
             self.top = 0
         elif self.Y1 > self.screenHeight:
@@ -38,6 +35,4 @@ class Background:
         self.screen.blit(self.IMG0, (self.X0,self.Y0))
         self.screen.blit(self.IMG1, (self.X1,self.Y1))
 
-        
-
-
+    

@@ -20,7 +20,7 @@ def topCollision(touching, touched):
 
 def leftCollision(touching, touched):
     # or (touching.right >= touched.left and touching.right <= touched.right)
-    if touching.left <= touched.right and touching.left >= touched.left and ((touched.top >= touching.top and touched.top <= touching.bottom) or (touched.bottom >= touching.top and touched.bottom <= touching.bottom) or (touching.bottom >= touched.top and touching.bottom <= touched.bottom)):
+    if touching.left <= touched.right and touching.left >= touched.left and ((touched.top > touching.top and touched.top < touching.bottom) or (touched.bottom > touching.top and touched.bottom < touching.bottom) or (touching.bottom > touched.top and touching.bottom < touched.bottom)):
         return 1
     else:
         return 0
@@ -28,7 +28,7 @@ def leftCollision(touching, touched):
 
 def rightCollision(touching, touched):
     # or (touching.right >= touched.left and touching.right <= touched.right)
-    if touching.right <= touched.right and touching.right >= touched.left and ((touched.top >= touching.top and touched.top <= touching.bottom) or (touched.bottom >= touching.top and touched.bottom <= touching.bottom) or (touching.bottom >= touched.top and touching.bottom <= touched.bottom)):
+    if touching.right <= touched.right and touching.right >= touched.left and ((touched.top > touching.top and touched.top < touching.bottom) or (touched.bottom > touching.top and touched.bottom < touching.bottom) or (touching.bottom > touched.top and touching.bottom < touched.bottom)):
         return 1
     else:
         return 0

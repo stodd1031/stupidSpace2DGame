@@ -18,6 +18,7 @@ class Cloud():
         self.character = character
         
     def update(self):
+        self.count += 1
         self.Y += self.yAcc
         self.top = self.Y + self.height / 3
         if self.count % 1000 == 0:
@@ -28,4 +29,4 @@ class Cloud():
         
         self.screen.blit(self.IMG, (self.X, self.Y))
 
-        self.count += 1
+        

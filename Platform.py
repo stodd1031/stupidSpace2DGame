@@ -24,6 +24,8 @@ class Plateform:
     def update(self):
         if self.character.Y < int(2/5 * self.screenHeight):
             self.Y += (int(2/5 * self.screenHeight) - self.character.Y)
+            self.top = self.Y
+            self.bottom = self.Y + self.height
 
         if self.Y > self.screenHeight:
             me = self.platformsManager.getPlatform(self)
@@ -33,10 +35,13 @@ class Plateform:
             self.IMG = pygame.transform.scale(self.IMG, (self.width,self.height))
             self.right = self.X + self.width
             self.left = self.X
+            self.platformsManager.visiblePlatforms.remove(self)
+            self.top = self.Y
+            self.bottom = self.Y + self.height
+        elif self.bottom > 0:
+            if not self in self.platformsManager.visiblePlatforms:
+                self.platformsManager.visiblePlatforms.append(self)
             
-
-        self.top = self.Y
-        self.bottom = self.Y + self.height
 
         
         self.screen.blit(self.IMG, (self.X, self.Y))

@@ -11,7 +11,7 @@ import Cloud
 
 WIDTH = 1000
 HEIGHT = 1000
-TICK = 30
+TICK = 60
 
 pygame.init()
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
@@ -40,26 +40,21 @@ k_down = False
 
 start = False
 
-
 for update in tickUpdates:
         update()
 
 myFont = pygame.font.SysFont("Times New Roman", 90)
-diceDisplay = myFont.render("Press Space to Start", 1, (255,0,0))
-screen.blit(diceDisplay, (WIDTH/2 - 340, HEIGHT/2))
+diceDisplay = myFont.render("Press Key to Start", 1, (255,0,0))
+screen.blit(diceDisplay, (WIDTH/2 - 320, HEIGHT/2))
 
 pygame.display.flip()
 
 while not start:
     for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == K_UP or event.key == K_SPACE:
-                    character.jumping = True
-                    character.jumpAllowed = False
-                    start = True
-            if event.type == pygame.QUIT:
-                exit()
-
+        if event.type == pygame.KEYUP:
+            start = True
+        if event.type == pygame.QUIT:
+            exit()
 
 running = True
 while running:
@@ -70,24 +65,25 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == K_UP or event.key == K_SPACE:
                 k_up = True
-                if character.jumpAllowed:
-                    character.jumping = True
-                    character.jumpAllowed = False
             if event.key == K_LEFT:
                 k_left = True
+                character.xAcc -= 20
             if event.key == K_RIGHT:
                 k_right = True
+                character.xAcc += 20
             if event.key == K_DOWN:
                 k_down = True
 
         if event.type == pygame.KEYUP:
             if event.key == K_UP or event.key == K_SPACE:
                 k_up = False
-                character.jumping = False
+                character.stopJump()
             if event.key == K_LEFT:
                 k_left = False
+                character.xAcc += 20
             if event.key == K_RIGHT:
                 k_right = False
+                character.xAcc -= 20
             if event.key == K_DOWN:
                 k_down = False
 
@@ -96,14 +92,13 @@ while running:
 
     if k_up:
         pass
+        character.jump()
     if k_left:
-        character.X -= 20
         pass
     if k_right:
-        character.X += 20
         pass
     if k_down:
-        character.Y += 40
+        pass
    
     for update in tickUpdates:
         update()
@@ -112,4 +107,5 @@ while running:
     end = time.time() * 1000
     delay = int(1000/TICK - (end - start))
     pygame.time.delay(delay)
+
     

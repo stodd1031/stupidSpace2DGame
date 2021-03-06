@@ -7,10 +7,11 @@ class PlatformsManager:
     def int(self, amount, screen, character):
         self.amount = amount
         self.platforms = [None] * amount
+        self.visiblePlatforms = []
         for i in range(0, amount):
             if i > 0:
-                randomX = random.randint(0, screen.get_width()-50)
-                randomY = random.randint((self.platforms[i-1].Y)-(550), self.platforms[i-1].Y - 100)
+                randomX = random.randint(0, screen.get_width()-80)
+                randomY = random.randint((self.platforms[i-1].Y)-(500), self.platforms[i-1].Y - 300)
 
                 platform = Platform.Plateform()
                 platform.int(randomX, randomY, screen, character, self)
@@ -19,6 +20,10 @@ class PlatformsManager:
                 platform = Platform.Plateform()
                 platform.int(screen.get_width()/2, 500, screen, character, self)
                 self.platforms[i] = platform
+
+            if platform.bottom > 0:
+                self.visiblePlatforms.append(platform)
+        
 
     def update(self):
         for i in range(0, self.amount):

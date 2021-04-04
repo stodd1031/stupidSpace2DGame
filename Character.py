@@ -4,10 +4,9 @@ import Engine
 import time
 
 class Character:
-    def int(self, screen, platformsManager, cloud):
+    def int(self, screen, platformsManager, cloud, asteroidManager):
         self.width = 87
         self.height = 150
-        #0.980599647 height to width ratio
         self.X = screen.get_width()/2
         self.Y = 500 - self.height
         self.xAcc = 0
@@ -16,7 +15,7 @@ class Character:
         self.top = self.Y
         self.left = self.X
         self.right = self.X + self.width
-        self.IMG = pygame.image.load('./Images/png/Idle (1).png')
+        self.IMG = pygame.image.load('./Images/png/Idle (1).png').convert_alpha()
         self.IMG = pygame.transform.scale(self.IMG, (self.width,self.height))
         self.jumping = False
         self.jumpAllowed = True
@@ -31,6 +30,7 @@ class Character:
         self.screenHeight = self.screen.get_height()
         self.platformsManager = platformsManager
         self.cloud = cloud
+        self.asteroidManager = asteroidManager
 
     def update(self):
         if self.Y < int(2/5 * self.screenHeight):
@@ -65,20 +65,27 @@ class Character:
                     self.points += 1
                     platform.point = False
                     self.diceDisplay = self.myFont.render(str(self.points), 1, (255,255,255))
+                break
             elif Engine.topCollision(self, platform):
                 self.stopJump()
                 self.Y = platform.bottom
-            elif not self.jumpAllowed:
+                break
+            else:
                 self.inAir = True
+                self.jumpAllowed = False
         self.top = self.Y
         self.bottom = self.Y + self.height
+        if self.inAir:
+            self.yAcc += 1
 
+        for asteroid in self.asteroidManager.visibleAsteroids:
+            if Engine.sideCollision(self, asteroid) != None:
+                self.endGame()
         if self.top > self.cloud.top:
             self.endGame()
         elif self.bottom >= self.screen.get_height():
             self.endGame()
-        elif self.inAir:
-            self.yAcc += 2
+        
 
         self.screen.blit(self.IMG, (self.X, self.Y))
         self.screen.blit(self.diceDisplay, (self.screen.get_width()/2 - 20, 30))
@@ -93,12 +100,13 @@ class Character:
 
     def jump(self):
         if self.jumpAllowed:
-            self.yAcc -= 50
+            self.yAcc -= 35
             self.jumping = True
             self.jumpAllowed = False
+            self.inAir = True
 
     def stopJump(self):
-        if not self.falling:
+        if self.jumping:
             self.yAcc = 0
             self.falling = True
             self.jumping = False

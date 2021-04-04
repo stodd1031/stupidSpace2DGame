@@ -1,37 +1,42 @@
+from AsteroidManager import AsteroidManager
 import pygame
 import time
+from pygame.locals import *
 
-from pygame.constants import K_DOWN, K_LEFT, K_RIGHT, K_UP, K_SPACE
+from pygame.constants import FULLSCREEN, K_DOWN, K_LEFT, K_RIGHT, K_UP, K_SPACE
  
 import Background
 import Character
 import Engine
 import PlatformsManager
 import Cloud
+import AsteroidManager
 
-WIDTH = 1000
-HEIGHT = 1000
+WIDTH = 2000
+HEIGHT = 1300
 TICK = 60
 
 pygame.init()
-screen = pygame.display.set_mode([WIDTH, HEIGHT])
-#pygame.key.set_repeat(1, int(1000/TICK)) #Holding key sends multiple keydown events after 1 ms every 1000/TICK ms
+screen = pygame.display.set_mode([WIDTH, HEIGHT], RESIZABLE)
 
 character = Character.Character()
 background = Background.Background()
 platformsManager = PlatformsManager.PlatformsManager()
 cloud = Cloud.Cloud()
+asteroidManager = AsteroidManager.AsteroidManager()
 
-character.int(screen, platformsManager, cloud)
+character.int(screen, platformsManager, cloud, asteroidManager)
 background.int(WIDTH, HEIGHT, screen, character)
 platformsManager.int(10, screen, character)
 cloud.int(screen, character)
+asteroidManager.int(10, screen, character)
 
 tickUpdates = []
 tickUpdates.append(background.update)
 tickUpdates.append(platformsManager.update)
 tickUpdates.append(character.update)
 tickUpdates.append(cloud.update)
+tickUpdates.append(asteroidManager.update)
 
 k_up = False
 k_left = False
@@ -47,9 +52,10 @@ myFont = pygame.font.SysFont("Times New Roman", 90)
 diceDisplay = myFont.render("Press Key to Start", 1, (255,0,0))
 screen.blit(diceDisplay, (WIDTH/2 - 320, HEIGHT/2))
 
-pygame.display.flip()
+
 
 while not start:
+    pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.KEYUP:
             start = True
@@ -67,10 +73,10 @@ while running:
                 k_up = True
             if event.key == K_LEFT:
                 k_left = True
-                character.xAcc -= 20
+                character.xAcc -= 15
             if event.key == K_RIGHT:
                 k_right = True
-                character.xAcc += 20
+                character.xAcc += 15
             if event.key == K_DOWN:
                 k_down = True
 
@@ -80,10 +86,10 @@ while running:
                 character.stopJump()
             if event.key == K_LEFT:
                 k_left = False
-                character.xAcc += 20
+                character.xAcc += 15
             if event.key == K_RIGHT:
                 k_right = False
-                character.xAcc -= 20
+                character.xAcc -= 15
             if event.key == K_DOWN:
                 k_down = False
 
@@ -102,6 +108,7 @@ while running:
    
     for update in tickUpdates:
         update()
+
 
     pygame.display.flip()
     end = time.time() * 1000

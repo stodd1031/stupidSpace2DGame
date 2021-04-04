@@ -1,14 +1,15 @@
 import pygame
+import time
 
 class Background:
     def int(self, WIDTH, HEIGHT, screen, character):
         self.width = WIDTH
         self.height = int(WIDTH/260 * 1625)
-        self.IMG0 =  pygame.image.load('./Images/space.png')
+        self.IMG0 =  pygame.image.load('./Images/space.png').convert()
         self.IMG0 = pygame.transform.scale(self.IMG0, (self.width,self.height))
         self.X0 = 0
         self.Y0 = 0
-        self.IMG1 =  pygame.image.load('./Images/space.png')
+        self.IMG1 =  pygame.image.load('./Images/space.png').convert()
         self.IMG1 = pygame.transform.scale(self.IMG1, (self.width,self.height))
         self.X1 = 0
         self.Y1 = (int(self.width/260 * 1625))
@@ -32,7 +33,6 @@ class Background:
         else:
             self.Y0 = self.Y1 - self.height
         
+
         self.screen.blit(self.IMG0, (self.X0,self.Y0))
         self.screen.blit(self.IMG1, (self.X1,self.Y1))
-
-    
